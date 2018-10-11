@@ -1,0 +1,131 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+
+<style>
+
+ul{
+  text-decoration: none;
+  list-style-type: none;
+}
+
+.check{
+  width:150px;
+}
+.check2{
+  width:100px;
+}
+.check{
+  width:200px;
+}
+.check3
+{
+  width:200px;
+}
+a
+{
+  text-decoration: none;
+  color:black;
+}
+a:hover{
+
+    text-decoration: none;
+    color:black;
+}
+</style>
+</head>
+<body>
+  <div>
+  <button><a href="/api2">Show all </a></button>
+  <button><a href="/sortbydate">Sort All tweets By date Descending</a></button>
+  <button><a href="/sortbytweet">Sort All tweets By Tweet</a></button>
+  <form method="post" action="/checkthis">
+  <select name="operation">
+    <option value="less">Less than</option>
+    <option value="equal">Equal</option>
+    <option value="greater">Greater</option>
+  </select>
+  <select name="attribute">
+    <option value="retweet">retweet</option>
+    <option value="favourite">favourite_count</option>
+    <option value="followers">followers</option>
+  </select>
+  <input type="text" placeholder="enter number" name="amt">
+  <button type="submit" >Find</button>
+</form>
+
+<form method="post" action="datefilter">
+  Date query
+<input type="text" placeholder="date in yyyy-mm-dd" name="from">
+<input type="text" placeholder="date in yyyy-mm-dd" name="to">
+<button type="submit">Find</button>
+</form>
+
+Select attribute to download
+<form method="post" action="download">
+<input type="checkbox"  name="Name">Name</input><br>
+<input type="checkbox"  name="followers">Followers</input><br>
+<input type="checkbox"  name="retweet">Retweet</input><br>
+<input type="checkbox"  name="created">Created</input><br>
+<input type="checkbox"  name="Language">Language</input><br>
+<input type="checkbox"  name="favourite">favourite</input><br>
+<input type="checkbox"  name="content">Content</input>
+
+<button type="submit">Find</button>
+</form>
+  </div>
+  <div id="test">
+
+    <table class="table" >
+      <thead>
+            <tr>
+              <th>Name</th>
+              <th>Followers</th>
+              <th>Retweet</th>
+              <th>Created</th>
+              <th>Language</th>
+              <th>favourite_count</th>
+              <th>Content</th>
+            </tr>
+          </thead>
+
+       <tbody>
+         <tr v-for="x in content">
+           <td >{{x.name}}</td>
+           <td >{{x.followers}}</td>
+            <td >{{x.retweet}}</td>
+             <td >{{x.created}}</td>
+                <td >{{x.lang}}</td>
+                  <td >{{x.fav}}</td>
+                      <td >{{x.cont}}</td>
+         </tr>
+       </tbody>
+     </table>
+</div>
+
+
+<script>
+
+new Vue({
+el:'#test',
+  data:{
+    content:[<% tweets.forEach(function(x){%>
+      {name:'<%=x.user.name%>',followers:'<%=x.user.follower%>',url:'<%=x.user.url%>',retweet:'<%=x.retweet%>',created:'<%=x.created%>',lang:'<%=x.lang%>',cont:'<%=x.content.replace(/(\r\n\t|\n|\r\t)/gm,"");%>',fav:'<%=x.user.fav_count%>'},
+    <%})%>]
+  },
+  computed:{
+
+  }
+})
+
+
+</script>
+</body>
+</html>
